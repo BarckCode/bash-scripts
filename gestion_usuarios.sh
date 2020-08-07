@@ -2,7 +2,7 @@
 #Programa para gestionar usuarios.
 #Autor: Barckcode
 
-OPTION=0
+OPTIONS=0
 USER=""
 
 #Menu de opciones:
@@ -24,17 +24,18 @@ USER=""
     echo "_____________________________________________________"
 
 #Leer opcion elegida por el usuario:
-read -p "Elige una opcion [1 - 11]: " OPTION
+read -p "Elige una opcion [1 - 11]: " OPTIONS
 echo "_____________________________________________________"
 
 
 #Validar opcion ingresada. Y ejecutar programa:
-case $OPTION in
+case $OPTIONS in
     1)
         echo "."
-        echo "Has elegio la opcion $OPTION"
+        echo "Has elegio la opcion $OPTIONS"
         echo "."
         read -p "Usuario a comprobar: " USER
+        
         echo "_____________________________________________________"
         echo "              SALIDA DE LOS COMANDOS                 "
         id $USER
@@ -50,34 +51,82 @@ case $OPTION in
         fi
         ;;
     2)
-        echo "Has elegio la opcion $OPTION"
+        echo "."
+        echo "Has elegio la opcion $OPTIONS"
+        echo "."
+        echo "*Necesitas permisos para ejecutar esta tarea*"
+        echo "."
+        read -p "Usuario a crear: " USER
+        read -p "Nombre o Actividad del Usuario: " MESSAGE
+        read -p "¿Quieres añadirlo a algun grupo? [S/n]: " OPTION 
+
+        if [[ "$OPTION" = "S" || "$OPTION" = "s" ]]
+        then
+            read -p "¿A que grupo quieres añadirlo?: " GROUP
+            echo "_____________________________________________________"
+            echo "              SALIDA DE LOS COMANDOS                 "
+            useradd -c "$MESSAGE" -G $GROUP $USER
+            VALIDATION=`echo $?`
+
+            echo "_____________________________________________________"
+            echo "                      RESULTADO                      "
+            if [[ VALIDATION -eq 0 ]]
+            then
+                echo "El usuario $USER se ha creado correctamente."
+            else
+                echo "El usuario $USER NO se ha podido crear."
+            fi
+        else
+            echo "_____________________________________________________"
+            echo "              SALIDA DE LOS COMANDOS                 "
+            useradd -c "$MESSAGE" $USER
+            VALIDATION=`echo $?`
+
+            echo "_____________________________________________________"
+            echo "                      RESULTADO                      "
+            if [[ VALIDATION -eq 0 ]]
+            then
+                echo "El usuario $USER se ha creado correctamente."
+            else
+                echo "El usuario $USER NO se ha podido crear."
+            fi
+        fi
         ;;
     3)
-        echo "Has elegio la opcion $OPTION"
+        echo "."
+        echo "Has elegio la opcion $OPTIONS"
+        echo "."
+        echo "*Necesitas permisos para ejecutar esta tarea*"
+        echo "."
+        
         ;;
     4)
-        echo "Has elegio la opcion $OPTION"
+        echo "."
+        echo "Has elegio la opcion $OPTIONS"
+        echo "."
         ;;
     5)
-        echo "Has elegio la opcion $OPTION"
+        echo "."
+        echo "Has elegio la opcion $OPTIONS"
+        echo "."
         ;;
     6)
-        echo "Has elegio la opcion $OPTION"
+        echo "Has elegio la opcion $OPTIONS"
         ;;
     7)
-        echo "Has elegio la opcion $OPTION"
+        echo "Has elegio la opcion $OPTIONS"
         ;;
     8)
-        echo "Has elegio la opcion $OPTION"
+        echo "Has elegio la opcion $OPTIONS"
         ;;
     9)
-        echo "Has elegio la opcion $OPTION"
+        echo "Has elegio la opcion $OPTIONS"
         ;;
     10)
-        echo "Has elegio la opcion $OPTION"
+        echo "Has elegio la opcion $OPTIONS"
         ;;
     11)
-        echo "Has elegio la opcion $OPTION"
+        echo "Has elegio la opcion $OPTIONS"
         ;;  
     *) 
         echo "ERROR: No has elegido ninguna opcion disponible."
