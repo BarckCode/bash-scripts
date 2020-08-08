@@ -19,12 +19,12 @@ USER=""
     echo "6. Cambiar Password del Usuario."
     echo "7. Verificar si el Usuario Esta Caducado o Bloqueado."
     echo "8. Desbloquear Usuario."
-    echo "9. Dar permisos de escalado a root a un Usuario"
-    echo "10. Dar permisos de sudo a un Usuario"
+    echo "9. Dar Permisos de Escalado a root a un Usuario"
+    echo "10. Dar Otros Permisos de sudo a un Usuario"
     echo "_____________________________________________________"
 
 #Leer opcion elegida por el usuario:
-read -p "Elige una opcion [1 - 11]: " OPTIONS
+read -p "Elige una opcion [1 - 10]: " OPTIONS
 echo "_____________________________________________________"
 
 
@@ -169,7 +169,7 @@ case $OPTIONS in
         echo "*Necesitas permisos para ejecutar esta tarea*"
         echo "."
         read -p "Usuario a cambiar la contraseña: " USER
-        read -p "Nueva constraseña: " PASSWORD
+        read -p -s "Nueva constraseña: " PASSWORD
 
         echo "_____________________________________________________"
         echo "              SALIDA DE LOS COMANDOS                 "
