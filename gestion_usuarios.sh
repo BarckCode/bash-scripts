@@ -169,7 +169,7 @@ case $OPTIONS in
         echo "*Necesitas permisos para ejecutar esta tarea*"
         echo "."
         read -p "Usuario a cambiar la contraseña: " USER
-        read -p -s "Nueva constraseña: " PASSWORD
+        read -p "Nueva constraseña: " PASSWORD
 
         echo "_____________________________________________________"
         echo "              SALIDA DE LOS COMANDOS                 "
@@ -191,6 +191,22 @@ case $OPTIONS in
         echo "."
         echo "*Necesitas permisos para ejecutar esta tarea*"
         echo "."
+	read -p "Usuario a comprobar: " USER
+
+	echo "_____________________________________________________"
+        echo "              SALIDA DE LOS COMANDOS                 "
+        id $USER
+	chage -l $USER
+        VALIDATION=`echo $?`
+
+        echo "_____________________________________________________"
+        echo "                      RESULTADO                      "
+        if [[ VALIDATION -eq 0 ]]
+        then
+            echo "Comprueba la salida de comandos referentes al usuario: $USER"
+        else
+            echo "No se ha podido comprobar al usuario: $USER"
+        fi
         ;;
     8)
         echo "."
@@ -198,6 +214,24 @@ case $OPTIONS in
         echo "."
         echo "*Necesitas permisos para ejecutar esta tarea*"
         echo "."
+        read -p "Usuario a desbloquear: " USER
+
+        echo "_____________________________________________________"
+        echo "              SALIDA DE LOS COMANDOS                 "
+	id $USER
+	VALIDATION=`echo $?`
+	usermod -U $USER
+	passwd -u $USER
+	chage -E -1 $USER
+
+	echo "_____________________________________________________"
+        echo "                      RESULTADO                      "
+        if [[ VALIDATION -eq 0 ]]
+        then
+            echo "Comprueba la salida de comandos referentes al usuario: $USER"
+        else
+            echo "El usuario: $USER no existe"
+        fi
         ;;
     9)
         echo "."
@@ -205,6 +239,28 @@ case $OPTIONS in
         echo "."
         echo "*Necesitas permisos para ejecutar esta tarea*"
         echo "."
+        read -p "Usuario al que asignar permisos: " USER
+
+        echo "_____________________________________________________"
+        echo "              SALIDA DE LOS COMANDOS                 "
+        id $USER
+        VALIDATION=`echo $?`
+
+	if [[ VALIDATION -eq 0 ]]
+        then
+		echo "_____________________________________________________"
+        	echo "              SALIDA DE LOS COMANDOS                 "
+		echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+		grep $USER /etc/sudoers
+        	
+		echo "_____________________________________________________"
+        	echo "                      RESULTADO                      "
+		echo "Se da permisos de escalado a root al usuario: $USER"
+        else
+                echo "_____________________________________________________"
+                echo "                      RESULTADO                      "                
+        	echo "El usuario: $USER no existe"
+        fi
         ;;
     10)
         echo "."
@@ -212,13 +268,30 @@ case $OPTIONS in
         echo "."
         echo "*Necesitas permisos para ejecutar esta tarea*"
         echo "."
-        ;;
-    11)
-        echo "."
-        echo "Has elegio la opcion $OPTIONS"
-        echo "."
-        echo "*Necesitas permisos para ejecutar esta tarea*"
-        echo "."
+	read -p "Usuario al que asignar permisos: " USER
+	read -p "Permisos a asignar: (Ejm: /usr/sbin/visudo): " PERMISSIONS
+      	
+        echo "_____________________________________________________"
+        echo "              SALIDA DE LOS COMANDOS                 "
+        id $USER
+        VALIDATION=`echo $?`
+
+        if [[ VALIDATION -eq 0 ]]
+        then
+                echo "_____________________________________________________"
+                echo "              SALIDA DE LOS COMANDOS                 "
+                echo "$USER ALL=(ALL) NOPASSWD:$PERMISSIONS" >> /etc/sudoers
+                grep $USER /etc/sudoers
+
+                echo "_____________________________________________________"
+                echo "                      RESULTADO                      "
+                echo "Se da los permisos indicados al usuario: $USER"
+        else
+                echo "_____________________________________________________"
+        	echo "                      RESULTADO                      "          
+            	echo "El usuario: $USER no existe"
+        fi
+
         ;;
     *)
         echo "ERROR: No has elegido ninguna opcion disponible."
